@@ -1,0 +1,15 @@
+NAMESPACE            NAME                                                READY   STATUS    RESTARTS      AGE
+default              annotest                                            1/1     Running   1 (49m ago)   110m
+kube-system          antrea-agent-rbjph                                  2/2     Running   0             167m
+kube-system          antrea-agent-tgk5f                                  2/2     Running   0             167m
+kube-system          antrea-controller-5c6bcfb69-nbntx                   1/1     Running   0             15m
+kube-system          coredns-7db6d8ff4d-ch87p                            1/1     Running   0             171m
+kube-system          coredns-7db6d8ff4d-n25n6                            1/1     Running   0             171m
+kube-system          etcd-antrea-test-control-plane                      1/1     Running   0             171m
+kube-system          kube-apiserver-antrea-test-control-plane            1/1     Running   0             171m
+kube-system          kube-controller-manager-antrea-test-control-plane   1/1     Running   0             171m
+kube-system          kube-proxy-788tk                                    1/1     Running   0             171m
+kube-system          kube-proxy-bpp6q                                    1/1     Running   0             171m
+kube-system          kube-scheduler-antrea-test-control-plane            1/1     Running   0             171m
+kube-system          packet-capture-6j9ll                                1/1     Running   0             13m
+local-path-storage   local-path-provisioner-988d74bc-sllqp               1/1     Running   0             171m

@@ -1,0 +1,60 @@
+Name:             annotest
+Namespace:        default
+Priority:         0
+Service Account:  default
+Node:             antrea-test-worker/172.18.0.3
+Start Time:       Wed, 11 Feb 2026 00:15:57 +0530
+Labels:           run=annotest
+Annotations:      tcpdump.antrea.io: 3
+Status:           Running
+IP:               10.244.1.2
+IPs:
+  IP:  10.244.1.2
+Containers:
+  annotest:
+    Container ID:  containerd://575896c176c0ce3289b362bd48d9809f0949882fc8ddedc0e7858cd7933b9e54
+    Image:         busybox
+    Image ID:      docker.io/library/busybox@sha256:b3255e7dfbcd10cb367af0d409747d511aeb66dfac98cf30e97e87e4207dd76f
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      sleep
+      3600
+    State:          Running
+      Started:      Wed, 11 Feb 2026 01:16:15 +0530
+    Last State:     Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Wed, 11 Feb 2026 00:16:11 +0530
+      Finished:     Wed, 11 Feb 2026 01:16:11 +0530
+    Ready:          True
+    Restart Count:  1
+    Environment:    <none>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-t5fmj (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-t5fmj:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   BestEffort
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:
+  Type     Reason        Age                  From             Message
+  ----     ------        ----                 ----             -------
+  Normal   Pulling       49m (x2 over 110m)   kubelet          Pulling image "busybox"
+  Normal   Created       49m (x2 over 109m)   kubelet          Created container annotest
+  Normal   Started       49m (x2 over 109m)   kubelet          Started container annotest
+  Normal   Pulled        49m                  kubelet          Successfully pulled image "busybox" in 3.2s (3.2s including waiting). Image size: 2222260 bytes.
+  Warning  NodeNotReady  59s (x31 over 108m)  node-controller  Node is not ready
