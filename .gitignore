@@ -1,0 +1,6 @@
+# Go build artifacts
+packet-capture
+cmd/cmd
+bin/
+*.exe
+*.out
