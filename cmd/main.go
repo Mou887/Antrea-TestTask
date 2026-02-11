@@ -45,10 +45,16 @@ func getCaptureCount(pod *corev1.Pod) (int, bool, error) {
 	return n, true, nil
 }
 
+type captureInfo struct {
+    cmd *exec.Cmd
+    n   int
+}
+
 var (
-	captureProcs = make(map[string]*exec.Cmd)
-	mu            sync.Mutex
+    captureProcs = make(map[string]*captureInfo)
+    mu           sync.Mutex
 )
+
 
 func podKey(pod *corev1.Pod) string {
 	return pod.Namespace + "/" + pod.Name
@@ -69,7 +75,7 @@ func startCapture(pod *corev1.Pod, n int) {
 
 	cmd := exec.Command(
 		"tcpdump",
-		"-C", "1",
+		"-C", "1M",
 		"-W", strconv.Itoa(n),
 		"-w", pcapPath,
 	)
@@ -82,7 +88,11 @@ func startCapture(pod *corev1.Pod, n int) {
 		return
 	}
 
-	captureProcs[key] = cmd
+	captureProcs[key] = &captureInfo{
+    cmd: cmd,
+    n:   n,
+}
+
 	fmt.Printf("[CAPTURE RUNNING] %s -> %s\n", key, pcapPath)
 }
 
@@ -92,19 +102,37 @@ func stopCapture(pod *corev1.Pod) {
 	mu.Lock()
 	defer mu.Unlock()
 
-	cmd, exists := captureProcs[key]
+	info, exists := captureProcs[key]
 	if !exists {
 		fmt.Printf("[INFO] no running capture for %s\n", key)
 		return
 	}
 
-	if err := cmd.Process.Kill(); err != nil {
+	// Kill the tcpdump process
+	if err := info.cmd.Process.Kill(); err != nil {
 		fmt.Printf("[ERROR] failed to stop tcpdump for %s: %v\n", key, err)
 	}
 
+	// Delete rotated pcap files
+	base := fmt.Sprintf("/captures/capture-%s.pcap", pod.Name)
+
+	for i := 0; i < info.n; i++ {
+		file := base
+		if i > 0 {
+			file = fmt.Sprintf("%s%d", base, i)
+		}
+
+		if err := os.Remove(file); err == nil {
+			fmt.Printf("[PCAP DELETED] %s\n", file)
+		}
+	}
+
+	
 	delete(captureProcs, key)
+
 	fmt.Printf("[CAPTURE STOPPED] %s\n", key)
 }
+
 
 func main() {
 	nodeName := os.Getenv("NODE_NAME")
