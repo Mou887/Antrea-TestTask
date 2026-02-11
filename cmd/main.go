@@ -19,6 +19,18 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
+// getCaptureCount retrieves the value of the "tcpdump.antrea.io" annotation
+// from the given Pod and attempts to parse it as a positive integer.
+//
+// It returns three values:
+//   - int:  the parsed capture count (0 if not set or invalid)
+//   - bool: whether the annotation is present on the Pod
+//   - error: non-nil if the annotation exists but contains an invalid value
+//
+// If the annotation is not present, the function returns (0, false, nil).
+// If the annotation is present but not a valid positive integer,
+// it returns (0, true, error).
+
 func getCaptureCount(pod *corev1.Pod) (int, bool, error) {
 	val, ok := pod.Annotations["tcpdump.antrea.io"]
 	if !ok {
